@@ -131,27 +131,65 @@ lunchController.get(
       ParticipantRepository
     );
 
-    const restaurantRepository: RestaurantRepository = getCustomRepository(
-      RestaurantRepository
+    const lunchRepository: LunchRepository = getCustomRepository(
+      LunchRepository
     );
+
 
     participantRepository
       .findParticipantsByLunchId(lunchId)
       .then((participants: Participant[]) => {
-        let ft_value_matrix = []; // # partcipants x # categories matrix
+        let utility_value_matrix = []; // # participants times restaurants
 
+        // Get all
         participants.forEach((participant) => {
           let values = [];
           participant.preferences.forEach((row_item) => {
             values.push(row_item.reduce((a, b) => a + b));
           });
-          ft_value_matrix.push(values);
+
+          // create vector containing utility values from each each restaurant
+          let utilities = [];
+          // calculated by taking maximum from available categories
+              // Loop all restaurants
+          lunchRepository.findOne({where: {lunchId}}).
+          then((lunch: Lunch) => {
+            lunch.possibleRestaurants.forEach((restaurant) =>{
+              var max_value = 0;
+
+              // Loop all category integers
+              // restaurant.foodTypes.forEach((food_type) => {
+                // food_type
+              // })
+            });
+          }).catch(() => {
+            response.status(500).send({ message: 'Unable to fetch lunch.'})
+          })
+
+          utility_value_matrix.push(utilities);
         });
 
-        // Iterate all restaurants and calculate maximum value available for each user (from b) --> M x K matrix
-        // Sum all columns --> utility for each restaurant
-        // Return the restaurant with maximum utility
-      })
+        // Sum all rows --> utility for each restaurant
+
+        var restaurant_rankings = [];
+        for (var column_index=0; column_index < utility_value_matrix[0].length; column_index++) {
+          var val = 0;
+          for (var row_index=0; row_index < utility_value_matrix.length; row_index++) {
+            val += utility_value_matrix[row_index][column_index];
+          }
+          restaurant_rankings.push(val);
+        }
+        var max_value = 0;
+        var arg_max = 0;
+        for (var i=0; i < restaurant_rankings.length; i++) {
+          if (restaurant_rankings[i] > max_value) {
+            arg_max = i;
+          } else {
+            // No action
+          }
+        }
+        })
+
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
