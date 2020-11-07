@@ -11,7 +11,7 @@ import { Lunch } from './entities/lunch';
 import { Participant } from './entities/participant';
 import { User } from './entities/user';
 import { Restaurant } from './entities/restaurant';
-import { generateRestaurant } from './fixtures/generate';
+import { createPostGresData } from './fixtures/data';
 
 const app = express();
 config();
@@ -39,28 +39,8 @@ export const connection = createConnection({
   logging: false
 }).then(() => {
   // generate test data to postgres
-  generateRestaurant('Barbarossa', 1, 60.168265, 24.930987, 'Pizzaa');
-  generateRestaurant(
-    'Singapore Hot Wok',
-    2,
-    60.169161,
-    24.933669,
-    'Numero 1, Numero 2, Numero 3'
-  );
-  generateRestaurant(
-    'McDonalds',
-    1,
-    60.169005,
-    24.929982,
-    'Big Mac & Cheesburger'
-  );
-  generateRestaurant(
-    'Noodle Master',
-    2,
-    60.171396,
-    24.926701,
-    'Dan Dan noodles'
-  );
+ 
+  createPostGresData()
 
   // start the Express server
   app.listen(port, () => {
