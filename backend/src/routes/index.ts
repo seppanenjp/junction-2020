@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { lunchController } from '../controllers/lunch';
 import { choiceController } from '../controllers/choice';
-import { createPostGresData } from '../fixtures/data';
+import { createPostgresData } from '../fixtures/data';
 
 export const routes = Router();
 
@@ -9,7 +9,7 @@ routes.use('/lunch', lunchController);
 routes.use('/choice', choiceController);
 
 routes.use('/fixtures', (request: Request, response: Response) => {
-  createPostGresData();
+  createPostgresData();
   response.send({ info: 'Fixtures created' });
 });
 
@@ -18,6 +18,6 @@ routes.use('/', (request: Request, response: Response) => {
 });
 
 routes.use('/fixtures', (request: Request, response: Response) => {
-  createPostGresData();
+  createPostgresData();
   response.send({ info: 'Fixtures created' });
 });
