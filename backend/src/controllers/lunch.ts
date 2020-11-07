@@ -123,6 +123,32 @@ lunchController.get(
   }
 );
 
+
+function customArgMax(arr) {
+  var max_value = 0;
+        var arg_max = 0;
+        for (var i=0; i < arr.length; i++) {
+          if (arr[i] > max_value) {
+            arg_max = i;
+          } else {
+            // No action
+          }
+        }
+  return arg_max;
+}
+
+function calculateUtilities(utility_value_matrix) {
+  var restaurant_rankings = [];
+        for (var column_index=0; column_index < utility_value_matrix[0].length; column_index++) {
+          var val = 0;
+          for (var row_index=0; row_index < utility_value_matrix.length; row_index++) {
+            val += utility_value_matrix[row_index][column_index];
+          }
+          restaurant_rankings.push(val);
+        }
+    return restaurant_rankings;
+}
+
 lunchController.get(
   '/lunch/:lunchId/ready',
   async (request: Request, response: Response) => {
@@ -171,25 +197,11 @@ lunchController.get(
 
         // Sum all rows --> utility for each restaurant
 
-        var restaurant_rankings = [];
-        for (var column_index=0; column_index < utility_value_matrix[0].length; column_index++) {
-          var val = 0;
-          for (var row_index=0; row_index < utility_value_matrix.length; row_index++) {
-            val += utility_value_matrix[row_index][column_index];
-          }
-          restaurant_rankings.push(val);
-        }
-        var max_value = 0;
-        var arg_max = 0;
-        for (var i=0; i < restaurant_rankings.length; i++) {
-          if (restaurant_rankings[i] > max_value) {
-            arg_max = i;
-          } else {
-            // No action
-          }
-        }
-        })
+        var restaurant_rankings = calculateUtilities(utility_value_matrix);
+        var restaurantIdx = customArgMax(restaurant_rankings);  // This is index of luchPossible restaurants array
 
+
+      })
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
