@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { lunchController } from '../controllers/lunch';
 import { choiceController } from '../controllers/choice';
-import { createPostGresData } from '../fixtures/data';
+import { createPostgresData } from '../fixtures/data';
 import { foodTypeController } from '../controllers/foodtypes';
 
 export const routes = Router();
@@ -11,7 +11,7 @@ routes.use('/choice', choiceController);
 routes.use('/foodtypes', foodTypeController);
 
 routes.use('/fixtures', (request: Request, response: Response) => {
-  createPostGresData();
+  createPostgresData();
   response.send({ info: 'Fixtures created' });
 });
 
