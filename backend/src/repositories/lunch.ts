@@ -1,4 +1,4 @@
-import { EntityRepository, In, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { Lunch } from '../entities/lunch';
 
 @EntityRepository(Lunch)
