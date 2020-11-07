@@ -20,6 +20,7 @@ export class LandingPageComponent {
   mode: AppMode = AppMode.View;
   lunch?: Lunch;
   participants: Participant[] = [];
+  participant?: Participant;
 
   foodType: FoodType = { id: 1, name: 'Mexican food' };
   foodType2: FoodType = { id: 1, name: 'Italian food' };
@@ -61,6 +62,19 @@ export class LandingPageComponent {
       .subscribe((participants: Participant[]) => {
         this.participants = participants;
       });
+  }
+
+  joinLunch(): void {
+    this.api
+      .post(`/lunch/${this.lunch.id}/join`, { username: 'Test case' })
+      .subscribe((participant: Participant) => {
+        this.participant = participant;
+        this.participants.push(participant);
+      });
+  }
+
+  setMode(mode: AppMode): void {
+    this.mode = mode;
   }
 
   copyUrl(): void {
