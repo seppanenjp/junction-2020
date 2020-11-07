@@ -25,6 +25,9 @@ export class Lunch {
   @Column({ type: 'float' })
   latitude: number;
 
+  @Column({ type: 'simple-array', nullable: true })
+  possibleRestaurants?: string[];
+
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.lunches, {
     onDelete: 'SET NULL'
   })
