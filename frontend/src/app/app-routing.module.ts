@@ -7,6 +7,10 @@ const routes: Routes = [
     path: '',
     component: LandingPageComponent
   },
+  {
+    path: 'lunch/:groupId',
+    component: LandingPageComponent
+  },
   { path: '**', component: LandingPageComponent }
 ];
 

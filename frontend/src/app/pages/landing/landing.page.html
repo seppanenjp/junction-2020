@@ -13,7 +13,7 @@
 
     <div class="lead" *ngIf="!lunch">
       <a class="btn btn-primary btn-lg" role="button" (click)="readyForLunch()">
-        Ready for a lunch! <i class="far fa-success"></i>
+        Create a new lunch group! <i class="far fa-success"></i>
       </a>
     </div>
 
@@ -24,8 +24,10 @@
           {{ lunchUrl }}
           <i class="far fa-copy ml-2 cursor-copy" (click)="copyUrl()"></i>
         </p>
+        <button class="btn btn-success btn-lg">
+          Liity mukaa <i class="far fa-thumbs-up"></i>
+        </button>
       </div>
-
       <ul class="list-group" *ngIf="participants">
         <li
           *ngFor="let participant of participants"
