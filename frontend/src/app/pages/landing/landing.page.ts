@@ -77,10 +77,10 @@ export class LandingPageComponent {
       .post(`/choice`, {
         participantId: this.participant.id,
         foodType: this.choices,
-        result: foodType.id
+        result: foodType.id - 1
       })
       .subscribe((choices: number[]) => {
-        console.log(choices);
+        this.choices = choices;
       });
   }
 

@@ -32,6 +32,6 @@ export class FoodSelectorComponent implements OnChanges {
   }
 
   getFoodType(id: number): FoodType {
-    return this.foodTypes.find((t) => t.id === id);
+    return this.foodTypes.find((t) => t.id === id + 1);
   }
 }
