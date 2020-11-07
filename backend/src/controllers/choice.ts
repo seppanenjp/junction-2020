@@ -9,21 +9,30 @@ choiceController.post('/', async (request: Request, response: Response) => {
   const result: number = choice.result;
   const participantId: string = choice.participantId;
 
-  // retrieve matrix from database
-  // update selection matrix
+
+  let A = MATRIX_FROM_DATABASE
+
   if (result) {
-    // A[foodType[0], foodType[1]] = 1
-    // A[foodType[1], foodType[0]] = 0
+    let subscription = foodType.reverse();
   } else {
-    // A[foodType[1], foodType[0]] = 1
-    // A[foodType[0], foodType[1]] = 0
+    let subscription = foodType;
   }
+  
+  A[foodType[0]][foodType[1]] = 0;
+  A[foodType[1]][foodType[0]] = 1;
+  
+  let N = A.length;
+  let combos = [];
+  for (i = 0; i < N; i++) { 
+    for (j = 0; j < i; j++) {
+      if (A[i][j]*A[j][i]==0) {
+        combos.push([i,j])
+      }
+    }
+  }
+  let combo = combos[Math.floor(Math.random() * N.length)];
+  
+  // UPDATE PARTICIPANT_DB WITH A
 
-  // find pair not explored yet (generate column row indexes and filter out ones containing 0 or 1)
-
-  // update A[food]
-
-  // TODO: save to participant here
-
-  response.send({ choices: [4, 2] }); // return the found pair
+  response.send({ choices: combo}); // return the found pair
 });
