@@ -29,10 +29,11 @@ lunchController.post(
 
     const restaurants = await restaurantRepository.find();
     const filteredRestaurantIds = [];
-    restaurants.forEach( (restaurant) => {
+    restaurants.forEach((restaurant) => {
+      console.log(restaurant);
       const distance = getDistance(
-        {latitude: restaurant.latitude, longitude: restaurant.longitude},
-        {latitude: lunch.latitude, longitude: lunch.longitude}
+        { latitude: restaurant.latitude, longitude: restaurant.longitude },
+        { latitude: lunch.latitude, longitude: lunch.longitude }
       );
       if (distance <= maxAllowedDistance) {
         filteredRestaurantIds.push(restaurant.id);
@@ -49,7 +50,24 @@ lunchController.post(
       .catch((e) => {
         response.status(500).send({ message: '' });
       });
+  }
+);
 
+lunchController.post(
+  '/:lunchId/join',
+  async (request: Request, response: Response) => {
+    const participant = request.body;
+
+    const participantRepository: ParticipantRepository = getCustomRepository(
+      ParticipantRepository
+    );
+
+    participantRepository
+      .save(participant)
+      .then((savedParticipant: Participant) => {
+        // TODO: create first combination set and return it
+        response.send(savedParticipant);
+      });
   }
 );
 
