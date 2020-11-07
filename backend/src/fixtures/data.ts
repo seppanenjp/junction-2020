@@ -69,7 +69,6 @@ export const createPostgresData = async () => {
     generateFoodType(16, 'Indian'),
     generateFoodType(17, 'American'),
     generateFoodType(18, 'Ramen'),
-    generateFoodType(19, 'Falafel'),
-    generateFoodType(20, 'Eco')
+    generateFoodType(19, 'Falafel')
   ]);
 };
