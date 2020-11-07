@@ -83,16 +83,16 @@ lunchController.post(
       .save(participant)
       .then((savedParticipant: Participant) => {
         let combos = [];
-        for (const i =0; i<20; i++) {
-          for (const j=0;j<i; j++) {
+        for (var i =0; i<20; i++) {
+          for (var j=0;j<i; j++) {
             if (i!=j) {
               combos.push([i,j]);
             }
           }
         }
         const c = combos.length;
-        first_combo = combos[Math.floor(Math.random()*20)]
-        
+        var first_combo = combos[Math.floor(Math.random()*20)]
+
         response.send(savedParticipant);
       });
   }
