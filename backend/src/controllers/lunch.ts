@@ -56,5 +56,13 @@ lunchController.get(
   '/lunch/:groupId/ready',
   async (request: Request, response: Response) => {
     // TODO: Make lunch ready here -> add restaurant id to lunch
+
+    // Find all participants of the group
+
+
+    // Calculate values for each user "b = P_tilde.sum(axis=0).flatten() / (N - 1)" --> N x K matrix
+    // Iterate all restaurants and calculate maximum value available for each user (from b) --> M x K matrix
+    // Sum all columns --> utility for each restaurant
+    // Return the restaurant with maximum utility
   }
 );
