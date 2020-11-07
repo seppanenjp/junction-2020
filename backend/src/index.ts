@@ -6,6 +6,7 @@ import 'reflect-metadata';
 import 'colors';
 import { createConnection } from 'typeorm';
 import { config } from 'dotenv';
+import { routes } from './routes';
 
 const app = express();
 config();
@@ -32,12 +33,10 @@ export const connection = createConnection({
   migrationsRun: true,
   logging: false
 }).then(() => {
-  app.get('/', (req, res) => {
-    res.send('Hello world!');
-  });
-
   // start the Express server
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`.green);
   });
+  
+  app.use('/', routes);
 });
