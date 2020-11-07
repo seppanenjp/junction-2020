@@ -5,8 +5,12 @@ import { Lunch } from '../entities/lunch';
 import { LunchRepository } from '../repositories/lunch';
 import { ParticipantRepository } from '../repositories/participant';
 import { Participant } from '../entities/participant';
+import { RestaurantRepository } from '../repositories/restaurant';
+import { getDistance } from 'geolib';
 
 export const lunchController = require('express').Router();
+
+const maxAllowedDistance = 2000;
 
 lunchController.post(
   '/create',
@@ -18,6 +22,25 @@ lunchController.post(
     const lunchRepository: LunchRepository = getCustomRepository(
       LunchRepository
     );
+    
+    const restaurantRepository: RestaurantRepository = getCustomRepository(
+      RestaurantRepository
+    );
+
+    const restaurants = await restaurantRepository.find();
+    const filteredRestaurantIds = [];
+    restaurants.forEach( (restaurant) => {
+      const distance = getDistance(
+        {latitude: restaurant.latitude, longitude: restaurant.longitude},
+        {latitude: lunch.latitude, longitude: lunch.longitude}
+      );
+      if (distance <= maxAllowedDistance) {
+        filteredRestaurantIds.push(restaurant.id);
+      }
+    });
+    lunch.possibleRestaurants = filteredRestaurantIds;
+    console.log(lunch);
+
     lunchRepository
       .save(lunch)
       .then((lunch) => {
@@ -26,6 +49,7 @@ lunchController.post(
       .catch((e) => {
         response.status(500).send({ message: '' });
       });
+
   }
 );
 
