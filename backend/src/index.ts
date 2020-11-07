@@ -12,6 +12,7 @@ import { Lunch } from './entities/lunch';
 import { Participant } from './entities/participant';
 import { User } from './entities/user';
 import { Restaurant } from './entities/restaurant';
+import { FoodType } from './entities/foodType';
 
 const app = express();
 config();
@@ -29,7 +30,7 @@ createConnection({
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
   port: Number(process.env.DB_PORT),
-  entities: [Lunch, Participant, User, Restaurant],
+  entities: [Lunch, Participant, User, Restaurant, FoodType],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {
     migrationsDir: 'src/migrations'
