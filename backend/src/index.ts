@@ -12,7 +12,6 @@ import { Lunch } from './entities/lunch';
 import { Participant } from './entities/participant';
 import { User } from './entities/user';
 import { Restaurant } from './entities/restaurant';
-import { createPostGresData } from './fixtures/data';
 
 const app = express();
 config();
@@ -40,9 +39,6 @@ createConnection({
   migrationsRun: true,
   logging: false
 }).then(() => {
-  // generate test data to postgres
-
-  createPostGresData();
 
   // start the Express server
   app.listen(port, () => {

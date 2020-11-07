@@ -1,42 +1,17 @@
+import { getCustomRepository } from 'typeorm';
+import { RestaurantRepository } from '../repositories/restaurant';
 import { generateRestaurant, generateFoodType } from './generate';
 
 export const createPostGresData = () => {
-  generateRestaurant('Barbarossa', 1, 60.168265, 24.930987, 'Pizzaa');
-  generateRestaurant(
-    'Singapore Hot Wok',
-    2,
-    60.169161,
-    24.933669,
-    'Numero 1, Numero 2, Numero 3'
+  const restaurantRepository: RestaurantRepository = getCustomRepository(
+    RestaurantRepository
   );
-  generateRestaurant(
-    'McDonalds',
-    1,
-    60.169005,
-    24.929982,
-    'Big Mac & Cheesburger'
-  );
-  generateRestaurant(
-    'Noodle Master',
-    2,
-    60.171396,
-    24.926701,
-    'Dan Dan noodles'
-  );
-  generateRestaurant(
-    'Classic Pizza Stockmann',
-    2,
-    60.168415,
-    24.942684,
-    'Best Pizza in town'
-  );
-  generateRestaurant(
-    'Ravintola Paulette',
-    2,
-    60.158708,
-    24.945918,
-    'French cuisine'
-  );
+  restaurantRepository.insert(generateRestaurant('Barbarossa', 1, 60.168265, 24.930987, 'Pizzaa'));
+  generateRestaurant('Singapore Hot Wok', 2, 60.169161, 24.933669, 'Numero 1, Numero 2, Numero 3');
+  generateRestaurant('McDonalds', 1, 60.169005, 24.929982, 'Big Mac & Cheesburger');
+  generateRestaurant('Noodle Master', 2, 60.171396, 24.926701, 'Dan Dan noodles');
+  generateRestaurant('Classic Pizza Stockmann', 2, 60.168415, 24.942684, 'Best Pizza in town');
+  generateRestaurant('Ravintola Paulette', 2, 60.158708, 24.945918, 'French cuisine');
 
   generateFoodType(0, 'Pizza');
   generateFoodType(1, 'Sushi');

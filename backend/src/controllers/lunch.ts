@@ -29,7 +29,8 @@ lunchController.post(
 
     const restaurants = await restaurantRepository.find();
     const filteredRestaurantIds = [];
-    restaurants.forEach( (restaurant) => {
+    restaurants.forEach((restaurant) => {
+      console.log(restaurant);
       const distance = getDistance(
         {latitude: restaurant.latitude, longitude: restaurant.longitude},
         {latitude: lunch.latitude, longitude: lunch.longitude}
