@@ -21,6 +21,7 @@ export class LandingPageComponent {
   lunch?: Lunch;
   participants: Participant[] = [];
   participant?: Participant;
+  choices: number[] = [];
 
   constructor(private api: APIClient, private route: ActivatedRoute) {
     const { groupId } = this.route.snapshot.params;
@@ -64,9 +65,22 @@ export class LandingPageComponent {
   joinLunch(): void {
     this.api
       .post(`/lunch/${this.lunch.id}/join`, { username: 'Test case' })
-      .subscribe((participant: Participant) => {
-        this.participant = participant;
-        this.participants.push(participant);
+      .subscribe((options: { participant: Participant; choices: number[] }) => {
+        this.participant = options.participant;
+        this.participants.push(options.participant);
+        this.choices = options.choices;
+      });
+  }
+
+  selectFood(foodType: FoodType): void {
+    this.api
+      .post(`/choice`, {
+        participantId: this.participant.id,
+        foodType: this.choices,
+        result: foodType.id
+      })
+      .subscribe((choices: number[]) => {
+        console.log(choices);
       });
   }
 

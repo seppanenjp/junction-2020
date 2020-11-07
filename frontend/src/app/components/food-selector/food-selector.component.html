@@ -1,14 +1,19 @@
-<div class="row mt-5 mb-5">
-  <div class="col-6">
+<div class="row">
+  <div class="col-12 text-center mt-4">
+    <h3>Select food type of which you like more</h3>
+  </div>
+</div>
+<div class="row mt-3 mb-5">
+  <div class="col-6" *ngIf="getFoodType(choices[0]); let foodType">
     <app-food-card
       (click)="selectFood(foodType)"
       [foodType]="foodType"
     ></app-food-card>
   </div>
-  <div class="col-6">
+  <div class="col-6" *ngIf="getFoodType(choices[1]); let foodType">
     <app-food-card
-      (click)="selectFood(foodType2)"
-      [foodType]="foodType2"
+      (click)="selectFood(foodType)"
+      [foodType]="foodType"
     ></app-food-card>
   </div>
 </div>

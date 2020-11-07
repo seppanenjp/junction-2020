@@ -4,9 +4,10 @@ import { getCustomRepository } from 'typeorm';
 import { Lunch } from '../entities/lunch';
 import { LunchRepository } from '../repositories/lunch';
 import { ParticipantRepository } from '../repositories/participant';
-import { Participant, Status } from '../entities/participant';
+import { initPreferences, Participant, Status } from '../entities/participant';
 import { RestaurantRepository } from '../repositories/restaurant';
 import { getDistance } from 'geolib';
+import { calculateUtilities, customArgMax, initMatrix } from '../utils/matrix';
 
 export const lunchController = require('express').Router();
 
@@ -59,21 +60,10 @@ lunchController.post(
     const { lunchId } = request.params;
     const participant = {
       ...request.body,
-      preferences: [],
+      preferences: initPreferences(),
       lunchId,
       status: Status.Pending
     };
-    for (var i; i <20; i++) {
-      var temp = [];
-      for (var j; j<20; j++) {
-        if (i==j) {
-          temp.push(0)
-        } else {
-          temp.push(0.5);
-        }
-      }
-      participant.preferences.push(temp);
-    }
 
     const participantRepository: ParticipantRepository = getCustomRepository(
       ParticipantRepository
@@ -82,18 +72,10 @@ lunchController.post(
     participantRepository
       .save(participant)
       .then((savedParticipant: Participant) => {
-        let combos = [];
-        for (var i =0; i<20; i++) {
-          for (var j=0;j<i; j++) {
-            if (i!=j) {
-              combos.push([i,j]);
-            }
-          }
-        }
-        const c = combos.length;
-        var first_combo = combos[Math.floor(Math.random()*20)]
-
-        response.send(savedParticipant);
+        response.send({
+          participant: savedParticipant,
+          choices: initMatrix()[Math.floor(Math.random() * 20)]
+        });
       });
   }
 );
@@ -138,44 +120,10 @@ lunchController.get(
         response.send(participants);
       })
       .catch((e) => {
-        console.log(e);
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
   }
 );
-
-function customArgMax(arr) {
-  var max_value = 0;
-  var arg_max = 0;
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > max_value) {
-      arg_max = i;
-    } else {
-      // No action
-    }
-  }
-  return arg_max;
-}
-
-function calculateUtilities(utility_value_matrix) {
-  var restaurant_rankings = [];
-  for (
-    var column_index = 0;
-    column_index < utility_value_matrix[0].length;
-    column_index++
-  ) {
-    var val = 0;
-    for (
-      var row_index = 0;
-      row_index < utility_value_matrix.length;
-      row_index++
-    ) {
-      val += utility_value_matrix[row_index][column_index];
-    }
-    restaurant_rankings.push(val);
-  }
-  return restaurant_rankings;
-}
 
 lunchController.get(
   '/lunch/:lunchId/ready',
@@ -193,11 +141,16 @@ lunchController.get(
       RestaurantRepository
     );
 
+    const restaurants = await restaurantRepository.find();
+
+    const lunch: Lunch = await lunchRepository.findOne({
+      where: { id: lunchId }
+    });
 
     participantRepository
       .findParticipantsByLunchId(lunchId)
       .then((participants: Participant[]) => {
-        let utility_value_matrix = []; // # participants times restaurants
+        const utility_value_matrix = []; // # participants times restaurants
 
         // Get all
         participants.forEach((participant) => {
@@ -207,38 +160,31 @@ lunchController.get(
           });
 
           // create vector containing utility values from each each restaurant
-          let utilities = [];
+          const utilities = [];
 
           // Loop all available restaurants
-          lunchRepository.findOne({where: {lunchId}}).
-          then((lunch: Lunch) => {
-            lunch.possibleRestaurants.forEach((restaurant_id) =>{
-              restaurantRepository.findOne({where: {restaurant_id}})
-              .then((restaurant) => {
-                var max_value = 0;
-                // Find maximum value from values
-                restaurant.foodTypes.forEach((food_type) => {
-                  if (values[food_type] > max_value) {
-                    max_value = values[food_type];
-                  }
-                })
-                utilities.push(max_value);
-              })
+
+          lunch.possibleRestaurants.forEach((restaurant_id) => {
+            const restaurant = restaurants.find((r) => r.id === restaurant_id);
+            let max_value = 0;
+            // Find maximum value from values
+            restaurant.foodTypes.forEach((food_type) => {
+              if (values[food_type] > max_value) {
+                max_value = values[food_type];
+              }
             });
+            utilities.push(max_value);
+            utility_value_matrix.push(utilities);
+          });
 
-          utility_value_matrix.push(utilities);
+          const restaurant_rankings = calculateUtilities(utility_value_matrix);
+          const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
+
+          const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
         });
-
-        var restaurant_rankings = calculateUtilities(utility_value_matrix);
-        var restaurantIdx = customArgMax(restaurant_rankings);  // This is index of luchPossible restaurants array
-
-        lunchRepository.findOne({where: {lunchId}})
-        .then((lunch: Lunch) => {
-            var optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
-          })
-        })
-    })
+      })
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
-    });
+  }
+);

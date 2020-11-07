@@ -52,3 +52,19 @@ export class Participant {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created: Date;
 }
+
+export const initPreferences = (): number[][] => {
+  const preferences = [];
+  for (let i = 0; i < 20; i++) {
+    let temp = [];
+    for (let j = 0; j < 20; j++) {
+      if (i == j) {
+        temp.push(0);
+      } else {
+        temp.push(0.5);
+      }
+    }
+    preferences.push(temp);
+  }
+  return preferences;
+};

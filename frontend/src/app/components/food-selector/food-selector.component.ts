@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output
+} from '@angular/core';
 import { APIClient } from '../../services/api.service';
 import { FoodType } from '../../models/food-type';
 
@@ -6,17 +12,26 @@ import { FoodType } from '../../models/food-type';
   selector: 'app-food-selector',
   templateUrl: 'food-selector.component.html'
 })
-export class FoodSelectorComponent {
-  foodType: FoodType = { id: 1, name: 'Mexican food' };
-  foodType2: FoodType = { id: 1, name: 'Italian food' };
+export class FoodSelectorComponent implements OnChanges {
+  @Input() choices: number[] = [];
+  @Output() select: EventEmitter<FoodType>;
 
   foodTypes: FoodType[] = [];
 
   constructor(private api: APIClient) {
+    this.select = new EventEmitter<FoodType>();
     this.api.get('/foodtypes').subscribe((foodTypes: FoodType[]) => {
       this.foodTypes = foodTypes;
     });
   }
 
-  selectFood(foodType: FoodType): void {}
+  ngOnChanges(): void {}
+
+  selectFood(foodType: FoodType): void {
+    this.select.emit(foodType);
+  }
+
+  getFoodType(id: number): FoodType {
+    return this.foodTypes.find((t) => t.id === id);
+  }
 }

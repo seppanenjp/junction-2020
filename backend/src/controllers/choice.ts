@@ -7,6 +7,8 @@ export const choiceController = require('express').Router();
 choiceController.post('/', async (request: Request, response: Response) => {
   const choice = request.body;
 
+  console.log(choice);
+
   const participantRepository: ParticipantRepository = getCustomRepository(
     ParticipantRepository
   );
@@ -19,7 +21,8 @@ choiceController.post('/', async (request: Request, response: Response) => {
 
   let subscription = choice.foodType;
 
-  if (choice.result) {
+  console.log('result', Boolean(choice.result === subscription[0]));
+  if (Boolean(choice.result === subscription[0])) {
     subscription = choice.foodType.reverse();
   }
 
@@ -27,6 +30,7 @@ choiceController.post('/', async (request: Request, response: Response) => {
   A[subscription[1]][subscription[0]] = 1;
 
   let N = A.length;
+  console.log('N', N);
   let combos = [];
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < i; j++) {
@@ -35,7 +39,10 @@ choiceController.post('/', async (request: Request, response: Response) => {
       }
     }
   }
+
+  console.log('combos', combos);
   let combo = combos[Math.floor(Math.random() * N)];
+  console.log('selected combo', combo);
 
   // UPDATE PARTICIPANT_DB WITH A
 
