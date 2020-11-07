@@ -9,8 +9,10 @@ export class Restaurant {
   @Column({ length: 255, unique: true })
   name: string;
 
-  @Column({ type: 'int' })
-  foodTypes: number;
+  @Column({
+    type: 'simple-array'
+  })
+  foodTypes?: number[] = [];
 
   @Column({ nullable: true })
   menu?: string;

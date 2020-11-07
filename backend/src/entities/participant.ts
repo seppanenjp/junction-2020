@@ -40,7 +40,7 @@ export class Participant {
   username: string;
 
   @Column({ type: 'simple-json' })
-  preferences: number[][];
+  preferences: number[][] = [];
 
   @Column({
     type: 'enum',

@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import { Lunch } from '../entities/lunch';
 import { LunchRepository } from '../repositories/lunch';
 import { ParticipantRepository } from '../repositories/participant';
-import { Participant } from '../entities/participant';
+import { Participant, Status } from '../entities/participant';
 import { RestaurantRepository } from '../repositories/restaurant';
 import { getDistance } from 'geolib';
 
@@ -56,7 +56,13 @@ lunchController.post(
 lunchController.post(
   '/:lunchId/join',
   async (request: Request, response: Response) => {
-    const participant = request.body;
+    const { lunchId } = request.params;
+    const participant = {
+      ...request.body,
+      preferences: [],
+      lunchId,
+      status: Status.Pending
+    };
 
     const participantRepository: ParticipantRepository = getCustomRepository(
       ParticipantRepository
