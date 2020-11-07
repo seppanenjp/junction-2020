@@ -5,6 +5,7 @@ import { Lunch } from '../../models/lunch';
 import { Participant, Status } from '../../models/participant';
 import { ActivatedRoute } from '@angular/router';
 import { FoodType } from '../../models/food-type';
+import { Restaurant } from '../../models/restaurant';
 
 enum AppMode {
   Join = 'Join',
@@ -23,6 +24,10 @@ export class LandingPageComponent {
   participant?: Participant;
   choices: number[] = [];
 
+  restaurant?: Restaurant;
+
+  choiceCount = 0;
+
   constructor(private api: APIClient, private route: ActivatedRoute) {
     const { groupId } = this.route.snapshot.params;
 
@@ -30,6 +35,9 @@ export class LandingPageComponent {
       this.api.get(`/lunch/${groupId}`).subscribe((lunch: Lunch) => {
         this.lunch = lunch;
         this.getParticipants();
+        if (this.lunch.restaurantId) {
+          this.getRestaurant();
+        }
       });
     }
   }
@@ -62,6 +70,13 @@ export class LandingPageComponent {
       });
   }
 
+  suggestRestaurant(): void {
+    this.api.get(`/lunch/${this.lunch.id}/ready`).subscribe((lunch: Lunch) => {
+      this.lunch = lunch;
+      this.getRestaurant();
+    });
+  }
+
   joinLunch(): void {
     this.api
       .post(`/lunch/${this.lunch.id}/join`, { username: 'Test case' })
@@ -80,8 +95,15 @@ export class LandingPageComponent {
         result: foodType.id - 1
       })
       .subscribe((choices: number[]) => {
+        this.choiceCount++;
         this.choices = choices;
       });
+  }
+
+  setReady(): void {
+    this.api.get(`/participants/${this.participant.id}/ready`).subscribe(() => {
+      this.participant.status = Status.Ready;
+    });
   }
 
   setMode(mode: AppMode): void {
@@ -98,6 +120,14 @@ export class LandingPageComponent {
     } else {
       // No possible to do other stuff so show error
     }
+  }
+
+  getRestaurant(): void {
+    this.api
+      .get(`/restaurant/${this.lunch.restaurantId}`)
+      .subscribe((restaurant: Restaurant) => {
+        this.restaurant = restaurant;
+      });
   }
 
   get hasParticipants(): boolean {

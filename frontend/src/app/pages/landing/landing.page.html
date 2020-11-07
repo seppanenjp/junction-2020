@@ -15,7 +15,7 @@
     </div>
 
     <div class="lead" *ngIf="lunch">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!lunch.restaurantId">
         <b>Here is your lunch invite url</b>
         <p class="mt-2">
           {{ lunchUrl }}
@@ -32,8 +32,17 @@
       <app-food-selector
         (select)="selectFood($event)"
         [choices]="choices"
-        *ngIf="participant && participant.status !== 'Ready'"
+        *ngIf="participant?.status !== 'Ready' && !lunch.restaurantId"
       ></app-food-selector>
+      <div
+        class="text-center"
+        *ngIf="participant?.status !== 'Ready' && choiceCount > 4"
+      >
+        <button class="btn btn-success btn-lg" (click)="setReady()">
+          I'm ready
+        </button>
+      </div>
+
       <div *ngIf="lunch && participants.length else noParticipants">
         <h4 class="mb-3">Participants</h4>
         <ul class="list-group">
@@ -61,9 +70,17 @@
         </div>
       </ng-template>
       <div class="text-center mt-3">
-        <button class="btn btn-success btn-lg" *ngIf="hasParticipants">
-          <i class="fas fa-check"></i> I'm ready for a lunch!
+        <button
+          class="btn btn-success btn-lg"
+          *ngIf="hasParticipants && !lunch.restaurantId"
+          (click)="suggestRestaurant()"
+        >
+          <i class="fas fa-check"></i> We are ready for a lunch!
         </button>
+      </div>
+      <div *ngIf="restaurant" class="text-center mt-5">
+        <h4 class="mb-4">Selected restaurant</h4>
+        <h1>{{restaurant.name}}</h1>
       </div>
     </div>
   </div>

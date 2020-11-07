@@ -11,7 +11,7 @@ import { calculateUtilities, customArgMax, initMatrix } from '../utils/matrix';
 
 export const lunchController = require('express').Router();
 
-const maxAllowedDistance = 2000;
+const maxAllowedDistance = 10000;
 
 lunchController.post(
   '/create',
@@ -31,7 +31,6 @@ lunchController.post(
     const restaurants = await restaurantRepository.find();
     const filteredRestaurantIds = [];
     restaurants.forEach((restaurant) => {
-      console.log(restaurant);
       const distance = getDistance(
         { latitude: restaurant.latitude, longitude: restaurant.longitude },
         { latitude: lunch.latitude, longitude: lunch.longitude }
@@ -41,7 +40,6 @@ lunchController.post(
       }
     });
     lunch.possibleRestaurants = filteredRestaurantIds;
-    console.log(lunch);
 
     lunchRepository
       .save(lunch)
@@ -126,7 +124,7 @@ lunchController.get(
 );
 
 lunchController.get(
-  '/lunch/:lunchId/ready',
+  '/:lunchId/ready',
   async (request: Request, response: Response) => {
     const { lunchId } = request.params;
     const participantRepository: ParticipantRepository = getCustomRepository(
@@ -163,6 +161,11 @@ lunchController.get(
           const utilities = [];
 
           // Loop all available restaurants
+          if (!lunch.possibleRestaurants.length) {
+            return response
+              .status(500)
+              .send({ message: 'There are no possible restaurants' });
+          }
 
           lunch.possibleRestaurants.forEach((restaurant_id) => {
             const restaurant = restaurants.find((r) => r.id === restaurant_id);
@@ -182,9 +185,16 @@ lunchController.get(
 
           const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
           console.log(optimal_restaurant);
+
+          lunchRepository
+            .save({ ...lunch, restaurantId: optimal_restaurant })
+            .then((lunch: Lunch) => {
+              response.send(lunch);
+            });
         });
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e);
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
   }
