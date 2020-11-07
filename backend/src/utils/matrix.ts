@@ -15,6 +15,7 @@ export const customArgMax = (arr) => {
   let arg_max = 0;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] > max_value) {
+      max_value = arr[i];
       arg_max = i;
     } else {
       // No action
