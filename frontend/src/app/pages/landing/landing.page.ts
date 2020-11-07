@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import * as copy from 'copy-to-clipboard';
 import { APIClient } from '../../services/api.service';
 import { Lunch } from '../../models/lunch';
-import { Participant } from '../../models/participant';
+import { Participant, Status } from '../../models/participant';
 import { ActivatedRoute } from '@angular/router';
+import { FoodType } from '../../models/food-type';
 
 enum AppMode {
-  JOIN = 'Join',
-  VIEW = 'View'
+  Join = 'Join',
+  View = 'View'
 }
 
 @Component({
@@ -16,9 +17,12 @@ enum AppMode {
   styleUrls: ['landing.page.scss']
 })
 export class LandingPageComponent {
-  mode: AppMode = AppMode.VIEW;
+  mode: AppMode = AppMode.View;
   lunch?: Lunch;
   participants: Participant[] = [];
+
+  foodType: FoodType = { id: 1, name: 'Mexican food' };
+  foodType2: FoodType = { id: 1, name: 'Italian food' };
 
   constructor(private api: APIClient, private route: ActivatedRoute) {
     const { groupId } = this.route.snapshot.params;
@@ -70,4 +74,12 @@ export class LandingPageComponent {
       // No possible to do other stuff so show error
     }
   }
+
+  get hasParticipants(): boolean {
+    return Boolean(
+      this.participants.filter((p) => p.status === Status.Ready).length
+    );
+  }
+
+  selectFood(foodType: FoodType): void {}
 }

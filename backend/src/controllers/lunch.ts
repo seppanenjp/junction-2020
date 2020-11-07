@@ -22,7 +22,7 @@ lunchController.post(
     const lunchRepository: LunchRepository = getCustomRepository(
       LunchRepository
     );
-    
+
     const restaurantRepository: RestaurantRepository = getCustomRepository(
       RestaurantRepository
     );
@@ -30,10 +30,13 @@ lunchController.post(
     const restaurants = await restaurantRepository.find();
     const filteredRestaurantIds = [];
     restaurants.forEach((restaurant) => {
+<<<<<<< HEAD
       console.log(restaurant);
+=======
+>>>>>>> 571e118ed103aa73625f30f69fa7b06938cbb774
       const distance = getDistance(
-        {latitude: restaurant.latitude, longitude: restaurant.longitude},
-        {latitude: lunch.latitude, longitude: lunch.longitude}
+        { latitude: restaurant.latitude, longitude: restaurant.longitude },
+        { latitude: lunch.latitude, longitude: lunch.longitude }
       );
       if (distance <= maxAllowedDistance) {
         filteredRestaurantIds.push(restaurant.id);
@@ -50,7 +53,6 @@ lunchController.post(
       .catch((e) => {
         response.status(500).send({ message: '' });
       });
-
   }
 );
 
@@ -108,6 +110,16 @@ lunchController.get(
       ParticipantRepository
     );
 
+    const lunchRepository: LunchRepository = getCustomRepository(
+      LunchRepository
+    );
+
+    const restaurantRepository: RestaurantRepository = getCustomRepository(
+      RestaurantRepository
+    );
+
+
+
     participantRepository
       .findParticipantsByLunchId(lunchId)
       .then((participants: Participant[]) => {
@@ -120,6 +132,7 @@ lunchController.get(
           });
           ft_value_matrix.push(values);
         });
+
         // Iterate all restaurants and calculate maximum value available for each user (from b) --> M x K matrix
         // Sum all columns --> utility for each restaurant
         // Return the restaurant with maximum utility

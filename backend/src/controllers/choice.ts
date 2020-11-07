@@ -1,29 +1,43 @@
 import { Request, Response } from 'express';
+import { ParticipantRepository } from '../repositories/participant';
+import { getCustomRepository } from 'typeorm';
 
 export const choiceController = require('express').Router();
 
 choiceController.post('/', async (request: Request, response: Response) => {
   const choice = request.body;
 
-  const foodType: number[] = choice.foodType;
-  const result: number = choice.result;
-  const participantId: string = choice.participantId;
+  const participantRepository: ParticipantRepository = getCustomRepository(
+    ParticipantRepository
+  );
 
-  // retrieve matrix from database
-  // update selection matrix
-  if (result) {
-    // A[foodType[0], foodType[1]] = 1
-    // A[foodType[1], foodType[0]] = 0
-  } else {
-    // A[foodType[1], foodType[0]] = 1
-    // A[foodType[0], foodType[1]] = 0
+  const participant = await participantRepository.findOne({
+    where: { id: choice.participantId }
+  });
+
+  let A = participant.preferences;
+
+  let subscription = choice.foodType;
+
+  if (choice.result) {
+    subscription = choice.foodType.reverse();
   }
 
-  // find pair not explored yet (generate column row indexes and filter out ones containing 0 or 1)
+  A[subscription[0]][subscription[1]] = 0;
+  A[subscription[1]][subscription[0]] = 1;
 
-  // update A[food]
+  let N = A.length;
+  let combos = [];
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < i; j++) {
+      if (A[i][j] * A[j][i] == 0) {
+        combos.push([i, j]);
+      }
+    }
+  }
+  let combo = combos[Math.floor(Math.random() * N)];
 
-  // TODO: save to participant here
+  // UPDATE PARTICIPANT_DB WITH A
 
-  response.send({ choices: [4, 2] }); // return the found pair
+  response.send({ choices: combo }); // return the found pair
 });
