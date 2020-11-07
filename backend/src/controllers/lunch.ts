@@ -161,6 +161,10 @@ lunchController.get(
       LunchRepository
     );
 
+    const restaurantRepository: RestaurantRepository = getCustomRepository(
+      RestaurantRepository
+    );
+
 
     participantRepository
       .findParticipantsByLunchId(lunchId)
@@ -176,17 +180,22 @@ lunchController.get(
 
           // create vector containing utility values from each each restaurant
           let utilities = [];
-          // calculated by taking maximum from available categories
-              // Loop all restaurants
+
+          // Loop all available restaurants
           lunchRepository.findOne({where: {lunchId}}).
           then((lunch: Lunch) => {
-            lunch.possibleRestaurants.forEach((restaurant) =>{
-              var max_value = 0;
-
-              // Loop all category integers
-              // restaurant.foodTypes.forEach((food_type) => {
-                // food_type
-              // })
+            lunch.possibleRestaurants.forEach((restaurant_id) =>{
+              restaurantRepository.findOne({where: {restaurant_id}})
+              .then((restaurant) => {
+                var max_value = 0;
+                // Find maximum value from values
+                restaurant.foodTypes.forEach((food_type) => {
+                  if (values[food_type] > max_value) {
+                    max_value = values[food_type];
+                  }
+                })
+                utilities.push(max_value);
+              })
             });
           }).catch(() => {
             response.status(500).send({ message: 'Unable to fetch lunch.'})
@@ -195,12 +204,13 @@ lunchController.get(
           utility_value_matrix.push(utilities);
         });
 
-        // Sum all rows --> utility for each restaurant
-
         var restaurant_rankings = calculateUtilities(utility_value_matrix);
         var restaurantIdx = customArgMax(restaurant_rankings);  // This is index of luchPossible restaurants array
 
-
+        lunchRepository.findOne({where: {lunchId}})
+        .then((lunch: Lunch) => {
+            var optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
+        } )
       })
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
