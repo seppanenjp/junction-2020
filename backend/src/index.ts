@@ -40,7 +40,6 @@ createConnection({
   migrationsRun: true,
   logging: false
 }).then(() => {
-
   // start the Express server
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`.green);

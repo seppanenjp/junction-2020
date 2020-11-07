@@ -53,6 +53,24 @@ lunchController.post(
   }
 );
 
+lunchController.post(
+  '/:lunchId/join',
+  async (request: Request, response: Response) => {
+    const participant = request.body;
+
+    const participantRepository: ParticipantRepository = getCustomRepository(
+      ParticipantRepository
+    );
+
+    participantRepository
+      .save(participant)
+      .then((savedParticipant: Participant) => {
+        // TODO: create first combination set and return it
+        response.send(savedParticipant);
+      });
+  }
+);
+
 lunchController.get(
   '/:groupId',
   async (request: Request, response: Response) => {
@@ -107,15 +125,9 @@ lunchController.get(
       ParticipantRepository
     );
 
-    const lunchRepository: LunchRepository = getCustomRepository(
-      LunchRepository
-    );
-
     const restaurantRepository: RestaurantRepository = getCustomRepository(
       RestaurantRepository
     );
-
-
 
     participantRepository
       .findParticipantsByLunchId(lunchId)

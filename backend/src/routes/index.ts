@@ -17,3 +17,7 @@ routes.use('/', (request: Request, response: Response) => {
   response.send({ info: 'Luncher backend' });
 });
 
+routes.use('/fixtures', (request: Request, response: Response) => {
+  createPostGresData();
+  response.send({ info: 'Fixtures created' });
+});
