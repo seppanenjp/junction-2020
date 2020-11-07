@@ -15,5 +15,4 @@ routes.use('/', (request: Request, response: Response) => {
 routes.use('/fixtures', (request: Request, response: Response) => {
   createPostGresData();
   response.send({ info: 'Fixtures created' });
-  
 });
