@@ -22,9 +22,6 @@ export class LandingPageComponent {
   participants: Participant[] = [];
   participant?: Participant;
 
-  foodType: FoodType = { id: 1, name: 'Mexican food' };
-  foodType2: FoodType = { id: 1, name: 'Italian food' };
-
   constructor(private api: APIClient, private route: ActivatedRoute) {
     const { groupId } = this.route.snapshot.params;
 
@@ -94,6 +91,4 @@ export class LandingPageComponent {
       this.participants.filter((p) => p.status === Status.Ready).length
     );
   }
-
-  selectFood(foodType: FoodType): void {}
 }

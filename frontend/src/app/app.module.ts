@@ -10,9 +10,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { APIClient } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FoodCardComponent } from './components/food-card/food-card.component';
+import { FoodSelectorComponent } from './components/food-selector/food-selector.component';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, FoodCardComponent],
+  declarations: [
+    AppComponent,
+    LandingPageComponent,
+    FoodCardComponent,
+    FoodSelectorComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -28,20 +28,7 @@
           Join to this lunch <i class="far fa-thumbs-up"></i>
         </button>
       </div>
-      <div class="row mt-5 mb-5">
-        <div class="col-6">
-          <app-food-card
-            (click)="selectFood(foodType)"
-            [foodType]="foodType"
-          ></app-food-card>
-        </div>
-        <div class="col-6">
-          <app-food-card
-            (click)="selectFood(foodType2)"
-            [foodType]="foodType2"
-          ></app-food-card>
-        </div>
-      </div>
+      <app-food-selector></app-food-selector>
       <div *ngIf="lunch && participants.length else noParticipants">
         <h4 class="mb-3">Participants</h4>
         <ul class="list-group">
