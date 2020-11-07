@@ -3,15 +3,16 @@ import { nanoid } from 'nanoid';
 import { getCustomRepository } from 'typeorm';
 import { Lunch } from '../entities/lunch';
 import { LunchRepository } from '../repositories/lunch';
-import { v4 as uuid } from 'uuid';
 
 export const lunchController = require('express').Router();
 
 lunchController.post(
   '/create',
   async (request: Request, response: Response) => {
-    const lunch: Lunch = { ...request.body };
-    console.log(lunch);
+    const lunch: Lunch = { ...request.body, groupId: nanoid() };
+    if (!lunch.latitude || !lunch.longitude) {
+      return response.status(400).send({ message: 'Position is missing' });
+    }
     const lunchRepository: LunchRepository = getCustomRepository(
       LunchRepository
     );
@@ -21,8 +22,32 @@ lunchController.post(
         response.send(lunch);
       })
       .catch((e) => {
-        console.log(e);
         response.status(500).send({ message: '' });
+      });
+  }
+);
+
+lunchController.get(
+  '/:groupId',
+  async (request: Request, response: Response) => {
+    const { groupId } = request.params;
+
+    const lunchRepository: LunchRepository = getCustomRepository(
+      LunchRepository
+    );
+
+    lunchRepository
+      .findByGroupId(groupId)
+      .then((lunch?: Lunch) => {
+        if (!lunch) {
+          return response
+            .status(404)
+            .send({ message: 'Unable to find lunch group' });
+        }
+        response.send(lunch);
+      })
+      .catch(() => {
+        response.status(500).send({ message: 'Unable to fetch lunch group' });
       });
   }
 );
