@@ -6,6 +6,5 @@ export const routes = Router();
 routes.use('/lunch', lunchController);
 
 routes.use('/', (request: Request, response: Response) => {
-    response.send({ info: 'Luncher backend' });
+  response.send({ info: 'Luncher backend' });
 });
-

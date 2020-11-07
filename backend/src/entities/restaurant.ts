@@ -1,11 +1,7 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn, 
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'Restaurant' })
-  export class Restaurant {
+export class Restaurant {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,12 +11,12 @@ import {
   @Column({ type: 'int' })
   foodTypes: number;
 
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   menu?: string;
-  
-  @Column({ type: "float" })
+
+  @Column({ type: 'float' })
   longitude: number;
-  
-  @Column({ type: "float" })
+
+  @Column({ type: 'float' })
   latitude: number;
 }

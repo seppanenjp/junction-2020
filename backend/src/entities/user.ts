@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Participant } from './participant';
 
 @Entity({ name: 'User' })
@@ -18,7 +13,7 @@ export class User {
   username: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created: Date; 
+  created: Date;
 
   @Column({ type: 'simple-json' })
   preferences: number[][][];

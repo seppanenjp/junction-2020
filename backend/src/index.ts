@@ -38,17 +38,34 @@ export const connection = createConnection({
   migrationsRun: true,
   logging: false
 }).then(() => {
-
   // generate test data to postgres
   generateRestaurant('Barbarossa', 1, 60.168265, 24.930987, 'Pizzaa');
-  generateRestaurant('Singapore Hot Wok', 2, 60.169161, 24.933669, 'Numero 1, Numero 2, Numero 3');
-  generateRestaurant('McDonalds', 1, 60.169005, 24.929982, 'Big Mac & Cheesburger');
-  generateRestaurant('Noodle Master', 2, 60.171396, 24.926701, 'Dan Dan noodles');
-  
+  generateRestaurant(
+    'Singapore Hot Wok',
+    2,
+    60.169161,
+    24.933669,
+    'Numero 1, Numero 2, Numero 3'
+  );
+  generateRestaurant(
+    'McDonalds',
+    1,
+    60.169005,
+    24.929982,
+    'Big Mac & Cheesburger'
+  );
+  generateRestaurant(
+    'Noodle Master',
+    2,
+    60.171396,
+    24.926701,
+    'Dan Dan noodles'
+  );
+
   // start the Express server
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`.green);
   });
-  
+
   app.use('/', routes);
 });
