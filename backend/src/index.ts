@@ -4,7 +4,8 @@ import * as prerender from 'prerender-node';
 import * as compression from 'compression';
 import 'reflect-metadata';
 import 'colors';
-import { createConnection, Generated } from 'typeorm';
+import { createConnection } from 'typeorm';
+import * as cors from 'cors';
 import { config } from 'dotenv';
 import { routes } from './routes';
 import { Lunch } from './entities/lunch';
@@ -18,10 +19,11 @@ config();
 const port = process.env.PORT || 8080;
 
 app.use(compression());
+app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(prerender);
 
-export const connection = createConnection({
+createConnection({
   type: 'postgres',
   username: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -39,8 +41,8 @@ export const connection = createConnection({
   logging: false
 }).then(() => {
   // generate test data to postgres
- 
-  createPostGresData()
+
+  createPostGresData();
 
   // start the Express server
   app.listen(port, () => {

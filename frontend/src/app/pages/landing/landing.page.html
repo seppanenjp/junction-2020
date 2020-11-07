@@ -11,12 +11,13 @@
     </p>
     <hr class="my-4" />
 
-    <div class="lead" *ngIf="!code">
+    <div class="lead" *ngIf="!lunch">
       <a class="btn btn-primary btn-lg" role="button" (click)="readyForLunch()">
         Ready for a lunch! <i class="far fa-success"></i>
       </a>
     </div>
-    <div class="lead" *ngIf="code">
+
+    <div class="lead" *ngIf="lunch">
       <div class="text-center">
         <b>Here is your lunch invite url</b>
         <p class="mt-2">
@@ -25,24 +26,13 @@
         </p>
       </div>
 
-      <ul class="list-group">
+      <ul class="list-group" *ngIf="participants">
         <li
+          *ngFor="let participant of participants"
           class="list-group-item d-flex justify-content-between align-items-center"
         >
-          Cras justo odio
-          <span class="badge badge-primary badge-pill">14</span>
-        </li>
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          Dapibus ac facilisis in
-          <span class="badge badge-primary badge-pill">2</span>
-        </li>
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          Morbi leo risus
-          <span class="badge badge-primary badge-pill">1</span>
+          {{participant.username}}
+          <span class="badge badge-primary badge-pill">Ready</span>
         </li>
       </ul>
     </div>

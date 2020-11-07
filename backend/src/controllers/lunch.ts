@@ -55,38 +55,52 @@ lunchController.get(
 );
 
 lunchController.get(
-  '/lunch/:groupId/ready',
+  '/:lunchId/participants',
   async (request: Request, response: Response) => {
-    const { groupId } = request.params;
-    const lunchRepository: LunchRepository = getCustomRepository(
-      LunchRepository
-    );
+    const { lunchId } = request.params;
 
-    const lunch = await lunchRepository.findByGroupId(groupId);
-
-    if (!lunch) {
-      return response.status(404).send({ message: 'Lunch not found' });
-    }
     const participantRepository: ParticipantRepository = getCustomRepository(
       ParticipantRepository
     );
 
     participantRepository
-      .findParticipantsByLunchId(lunch.id)
+      .find({ where: { lunchId } })
       .then((participants: Participant[]) => {
-        let ft_value_matrix = [];  // # partcipants x # categories matrix
+        response.send(participants);
+      })
+      .catch((e) => {
+        console.log(e);
+        response.status(500).send({ message: 'Unable to fetch participants' });
+      });
+  }
+);
 
-        participants.forEach(participant => {
+lunchController.get(
+  '/lunch/:lunchId/ready',
+  async (request: Request, response: Response) => {
+    const { lunchId } = request.params;
+    const participantRepository: ParticipantRepository = getCustomRepository(
+      ParticipantRepository
+    );
+
+    participantRepository
+      .findParticipantsByLunchId(lunchId)
+      .then((participants: Participant[]) => {
+        let ft_value_matrix = []; // # partcipants x # categories matrix
+
+        participants.forEach((participant) => {
           let values = [];
-          participant.preferences.forEach(row_item => {
+          participant.preferences.forEach((row_item) => {
             values.push(row_item.reduce((a, b) => a + b));
-          })
-          ft_value_matrix.push(values)
-        })
+          });
+          ft_value_matrix.push(values);
+        });
         // Iterate all restaurants and calculate maximum value available for each user (from b) --> M x K matrix
         // Sum all columns --> utility for each restaurant
         // Return the restaurant with maximum utility
-    })
+      })
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
-      })});
+      });
+  }
+);

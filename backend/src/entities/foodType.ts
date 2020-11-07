@@ -1,17 +1,10 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import {
-    Column,
-    Entity,
-    PrimaryGeneratedColumn
-} from 'typeorm';
-  
 @Entity({ name: 'FoodType' })
 export class FoodType {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({unique:true})
-    name: string;
-  
+  @Column({ unique: true })
+  name: string;
 }
-
