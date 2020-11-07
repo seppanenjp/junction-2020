@@ -10,12 +10,7 @@ export const lunchController = require('express').Router();
 lunchController.post(
   '/create',
   async (request: Request, response: Response) => {
-    const { longitude, latitude } = request.body;
-    const lunch: Lunch = {
-      id: uuid(),
-      latitude,
-      longitude
-    } as Lunch;
+    const lunch: Lunch = { ...request.body };
     console.log(lunch);
     const lunchRepository: LunchRepository = getCustomRepository(
       LunchRepository

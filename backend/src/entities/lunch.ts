@@ -1,29 +1,42 @@
 import {
   Column,
   Entity,
+  Index,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { Participant } from './participant';
+import { Restaurant } from './restaurant';
 
 @Entity({ name: 'Lunch' })
 export class Lunch {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Participant, (participant) => participant.lunch, {
-    onDelete: 'SET NULL'
-  })
+  @Index()
+  @Column({ unique: true })
+  groupId: string;
+
   @Column({ type: 'float' })
   longitude: number;
 
   @Column({ type: 'float' })
   latitude: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created: Date;
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.lunches, {
+    onDelete: 'SET NULL'
+  })
+  @JoinColumn({ name: 'restaurantId' })
+  restaurant?: Restaurant;
+
+  @Column({ type: 'uuid', nullable: true })
+  restaurantId?: string;
 
   @OneToMany(() => Participant, (participant) => participant.lunch)
   participants?: Participant[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created: Date;
 }

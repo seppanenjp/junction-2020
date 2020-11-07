@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Lunch } from './lunch';
 
 @Entity({ name: 'Restaurant' })
 export class Restaurant {
@@ -19,4 +20,7 @@ export class Restaurant {
 
   @Column({ type: 'float' })
   latitude: number;
+
+  @OneToMany(() => Lunch, (lunch) => lunch.restaurant)
+  lunches?: Lunch[];
 }
