@@ -123,30 +123,37 @@ lunchController.get(
   }
 );
 
-
 function customArgMax(arr) {
   var max_value = 0;
-        var arg_max = 0;
-        for (var i=0; i < arr.length; i++) {
-          if (arr[i] > max_value) {
-            arg_max = i;
-          } else {
-            // No action
-          }
-        }
+  var arg_max = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] > max_value) {
+      arg_max = i;
+    } else {
+      // No action
+    }
+  }
   return arg_max;
 }
 
 function calculateUtilities(utility_value_matrix) {
   var restaurant_rankings = [];
-        for (var column_index=0; column_index < utility_value_matrix[0].length; column_index++) {
-          var val = 0;
-          for (var row_index=0; row_index < utility_value_matrix.length; row_index++) {
-            val += utility_value_matrix[row_index][column_index];
-          }
-          restaurant_rankings.push(val);
-        }
-    return restaurant_rankings;
+  for (
+    var column_index = 0;
+    column_index < utility_value_matrix[0].length;
+    column_index++
+  ) {
+    var val = 0;
+    for (
+      var row_index = 0;
+      row_index < utility_value_matrix.length;
+      row_index++
+    ) {
+      val += utility_value_matrix[row_index][column_index];
+    }
+    restaurant_rankings.push(val);
+  }
+  return restaurant_rankings;
 }
 
 lunchController.get(
@@ -197,9 +204,6 @@ lunchController.get(
                 utilities.push(max_value);
               })
             });
-          }).catch(() => {
-            response.status(500).send({ message: 'Unable to fetch lunch.'})
-          })
 
           utility_value_matrix.push(utilities);
         });
@@ -210,10 +214,10 @@ lunchController.get(
         lunchRepository.findOne({where: {lunchId}})
         .then((lunch: Lunch) => {
             var optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
-        } )
-      })
+          })
+        })
+    })
       .catch(() => {
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
-  }
-);
+    });
