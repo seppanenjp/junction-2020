@@ -63,9 +63,9 @@ lunchController.post(
       lunchId,
       status: Status.Pending
     };
-    for (const i; i <20; i++) {
-      const temp = [];
-      for (const j; j<20; j++) {
+    for (var i; i <20; i++) {
+      var temp = [];
+      for (var j; j<20; j++) {
         if (i==j) {
           temp.push(0)
         } else {
