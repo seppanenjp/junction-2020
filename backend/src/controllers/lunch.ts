@@ -22,17 +22,17 @@ lunchController.post(
     const lunchRepository: LunchRepository = getCustomRepository(
       LunchRepository
     );
-    
+
     const restaurantRepository: RestaurantRepository = getCustomRepository(
       RestaurantRepository
     );
 
     const restaurants = await restaurantRepository.find();
     const filteredRestaurantIds = [];
-    restaurants.forEach( (restaurant) => {
+    restaurants.forEach((restaurant) => {
       const distance = getDistance(
-        {latitude: restaurant.latitude, longitude: restaurant.longitude},
-        {latitude: lunch.latitude, longitude: lunch.longitude}
+        { latitude: restaurant.latitude, longitude: restaurant.longitude },
+        { latitude: lunch.latitude, longitude: lunch.longitude }
       );
       if (distance <= maxAllowedDistance) {
         filteredRestaurantIds.push(restaurant.id);
@@ -49,7 +49,6 @@ lunchController.post(
       .catch((e) => {
         response.status(500).send({ message: '' });
       });
-
   }
 );
 

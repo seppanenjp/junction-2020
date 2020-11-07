@@ -9,9 +9,10 @@ import { LandingPageComponent } from './pages/landing/landing.page';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { APIClient } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FoodCardComponent } from './components/food-card/food-card.component';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent],
+  declarations: [AppComponent, LandingPageComponent, FoodCardComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

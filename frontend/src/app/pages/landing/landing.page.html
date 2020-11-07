@@ -24,11 +24,14 @@
           {{ lunchUrl }}
           <i class="far fa-copy ml-2 cursor-copy" (click)="copyUrl()"></i>
         </p>
-        <button class="btn btn-success btn-lg">
-          Liity mukaa <i class="far fa-thumbs-up"></i>
+        <button class="btn btn-success btn-lg mt-3">
+          Join to this lunch <i class="far fa-thumbs-up"></i>
         </button>
       </div>
-      <ul class="list-group" *ngIf="participants">
+      <ul
+        class="list-group"
+        *ngIf="lunch && participants.length else noParticipants"
+      >
         <li
           *ngFor="let participant of participants"
           class="list-group-item d-flex justify-content-between align-items-center"
@@ -37,6 +40,32 @@
           <span class="badge badge-primary badge-pill">Ready</span>
         </li>
       </ul>
+      <ng-template #noParticipants>
+        <div class="text-center mt-5">
+          <h3><i class="far fa-frown-open"></i> Lunch has no participants!</h3>
+        </div>
+      </ng-template>
+      <div class="row">
+        <div class="col-6">
+          <app-food-card
+            class="animate__animated animate__bounce"
+            (click)="selectFood(foodType)"
+            [foodType]="foodType"
+          ></app-food-card>
+        </div>
+        <div class="col-6">
+          <app-food-card
+            (click)="selectFood(foodType2)"
+            [foodType]="foodType2"
+          ></app-food-card>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button class="btn btn-success btn-lg" *ngIf="hasParticipants">
+          <i class="fas fa-check"></i> I'm ready for a lunch!
+        </button>
+      </div>
     </div>
   </div>
 </div>

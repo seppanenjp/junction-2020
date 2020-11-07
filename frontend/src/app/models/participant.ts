@@ -1,6 +1,11 @@
 import { Lunch } from './lunch';
 import { User } from './user';
 
+export enum Status {
+  Ready = 'Ready',
+  Pending = 'Pending'
+}
+
 export class Participant {
   id: string;
   user?: User;
@@ -9,5 +14,6 @@ export class Participant {
   lunchId: string;
   username: string;
   preferences: number[][];
+  status: Status;
   created: Date;
 }
