@@ -63,6 +63,17 @@ lunchController.post(
       lunchId,
       status: Status.Pending
     };
+    for (const i; i <20; i++) {
+      const temp = [];
+      for (const j; j<20; j++) {
+        if (i==j) {
+          temp.push(0)
+        } else {
+          temp.push(0.5);
+        }
+      }
+      participant.preferences.push(temp);
+    }
 
     const participantRepository: ParticipantRepository = getCustomRepository(
       ParticipantRepository
@@ -71,7 +82,17 @@ lunchController.post(
     participantRepository
       .save(participant)
       .then((savedParticipant: Participant) => {
-        // TODO: create first combination set and return it
+        let combos = [];
+        for (const i =0; i<20; i++) {
+          for (const j=0;j<i; j++) {
+            if (i!=j) {
+              combos.push([i,j]);
+            }
+          }
+        }
+        const c = combos.length;
+        first_combo = combos[Math.floor(Math.random()*20)]
+        
         response.send(savedParticipant);
       });
   }
