@@ -51,3 +51,10 @@ lunchController.get(
       });
   }
 );
+
+lunchController.get(
+  '/lunch/:groupId/ready',
+  async (request: Request, response: Response) => {
+    // TODO: Make lunch ready here -> add restaurant id to lunch
+  }
+);
