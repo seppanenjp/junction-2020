@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as copy from 'copy-to-clipboard';
+import { APIClient } from '../../services/api.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -9,10 +10,16 @@ import * as copy from 'copy-to-clipboard';
 export class LandingPageComponent {
   code?: string;
 
-  constructor() {}
+  constructor(private api: APIClient) {}
 
   getCode(position): void {
-    console.log(position);
+    const coordinates = position.coords;
+    this.api
+      .post('/lunch/create', {
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude
+      })
+      .subscribe((lunch: any) => {});
     this.code = '0304AF92-6E96-409F-8CDA-C2244AE61C34';
   }
 
@@ -24,7 +31,7 @@ export class LandingPageComponent {
     copy(this.lunchUrl);
   }
 
-  getLocation(): void {
+  readyForLunch(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.getCode);
     } else {
