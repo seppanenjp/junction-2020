@@ -177,8 +177,8 @@ lunchController.get(
               }
             });
             utilities.push(max_value);
-            utility_value_matrix.push(utilities);
           });
+          utility_value_matrix.push(utilities);
 
           const restaurant_rankings = calculateUtilities(utility_value_matrix);
           const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
