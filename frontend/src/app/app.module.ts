@@ -11,6 +11,7 @@ import { APIClient } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FoodCardComponent } from './components/food-card/food-card.component';
 import { FoodSelectorComponent } from './components/food-selector/food-selector.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FoodSelectorComponent } from './components/food-selector/food-selector.
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [APIClient],
   bootstrap: [AppComponent]

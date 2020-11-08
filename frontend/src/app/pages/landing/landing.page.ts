@@ -7,25 +7,19 @@ import { ActivatedRoute } from '@angular/router';
 import { FoodType } from '../../models/food-type';
 import { Restaurant } from '../../models/restaurant';
 
-enum AppMode {
-  Join = 'Join',
-  View = 'View'
-}
-
 @Component({
   selector: 'app-landing-page',
   templateUrl: 'landing.page.html',
   styleUrls: ['landing.page.scss']
 })
 export class LandingPageComponent {
-  mode: AppMode = AppMode.View;
   lunch?: Lunch;
   participants: Participant[] = [];
   participant?: Participant;
   choices: number[] = [];
 
   restaurant?: Restaurant;
-
+  username = '';
   choiceCount = 0;
 
   constructor(private api: APIClient, private route: ActivatedRoute) {
@@ -79,7 +73,7 @@ export class LandingPageComponent {
 
   joinLunch(): void {
     this.api
-      .post(`/lunch/${this.lunch.id}/join`, { username: 'Test case' })
+      .post(`/lunch/${this.lunch.id}/join`, { username: this.username })
       .subscribe((options: { participant: Participant; choices: number[] }) => {
         this.participant = options.participant;
         this.participants.push(options.participant);
@@ -104,10 +98,6 @@ export class LandingPageComponent {
     this.api.get(`/participants/${this.participant.id}/ready`).subscribe(() => {
       this.participant.status = Status.Ready;
     });
-  }
-
-  setMode(mode: AppMode): void {
-    this.mode = mode;
   }
 
   copyUrl(): void {
