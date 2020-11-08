@@ -125,4 +125,11 @@ export class LandingPageComponent {
       this.participants.filter((p) => p.status === Status.Ready).length
     );
   }
+
+  navigate(): void {
+    window.open(
+      `https://maps.google.com/?q=${this.restaurant.latitude},${this.restaurant.longitude}`,
+      '_blank'
+    );
+  }
 }

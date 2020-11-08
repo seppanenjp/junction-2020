@@ -161,35 +161,42 @@ lunchController.get(
           const utilities = [];
 
           // Loop all available restaurants
-          if (!lunch.possibleRestaurants.length) {
-            return response
+          if (lunch.possibleRestaurants.length) {
+            lunch.possibleRestaurants.forEach((restaurant_id) => {
+              const restaurant = restaurants.find(
+                (r) => r.id === restaurant_id
+              );
+              let max_value = 0;
+              // Find maximum value from values
+              restaurant.foodTypes.forEach((food_type) => {
+                if (values[food_type] > max_value) {
+                  max_value = values[food_type];
+                }
+              });
+              utilities.push(max_value);
+            });
+            utility_value_matrix.push(utilities);
+
+            const restaurant_rankings = calculateUtilities(
+              utility_value_matrix
+            );
+            const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
+
+            const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
+
+            lunchRepository
+              .save({ ...lunch, restaurantId: optimal_restaurant })
+              .then((lunch: Lunch) => {
+                response.send(lunch);
+              })
+              .catch((e) => {
+                response.status(500).send({ message: 'Unable to save lunch' });
+              });
+          } else {
+            response
               .status(500)
               .send({ message: 'There are no possible restaurants' });
           }
-
-          lunch.possibleRestaurants.forEach((restaurant_id) => {
-            const restaurant = restaurants.find((r) => r.id === restaurant_id);
-            let max_value = 0;
-            // Find maximum value from values
-            restaurant.foodTypes.forEach((food_type) => {
-              if (values[food_type] > max_value) {
-                max_value = values[food_type];
-              }
-            });
-            utilities.push(max_value);
-          });
-          utility_value_matrix.push(utilities);
-
-          const restaurant_rankings = calculateUtilities(utility_value_matrix);
-          const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
-
-          const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
-
-          lunchRepository
-            .save({ ...lunch, restaurantId: optimal_restaurant })
-            .then((lunch: Lunch) => {
-              response.send(lunch);
-            });
         });
       })
       .catch((e) => {
