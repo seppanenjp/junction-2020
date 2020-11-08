@@ -21,10 +21,29 @@
           {{ lunchUrl }}
           <i class="far fa-copy ml-2 cursor-copy" (click)="copyUrl()"></i>
         </p>
+        <ng-template #popContent>
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="My name is..."
+              [(ngModel)]="username"
+            />
+            <div
+              class="input-group-append pointer no-select"
+              (click)="joinLunch()"
+            >
+              <span class="input-group-text">Join</span>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #popTitle>Hey, what's your name?</ng-template>
         <button
+          [autoClose]="'outside'"
+          [ngbPopover]="popContent"
+          [popoverTitle]="popTitle"
           class="btn btn-success btn-lg mt-3"
           *ngIf="!participant"
-          (click)="joinLunch()"
         >
           Join to this lunch <i class="far fa-thumbs-up"></i>
         </button>
@@ -32,7 +51,7 @@
       <app-food-selector
         (select)="selectFood($event)"
         [choices]="choices"
-        *ngIf="participant?.status !== 'Ready' && !lunch.restaurantId"
+        *ngIf="participant && participant?.status !== 'Ready' && !lunch.restaurantId"
       ></app-food-selector>
       <div
         class="text-center"
@@ -80,7 +99,7 @@
       </div>
       <div *ngIf="restaurant" class="text-center mt-5">
         <h4 class="mb-4">Selected restaurant</h4>
-        <h1>{{restaurant.name}}</h1>
+        <h1 class="text-primary">{{restaurant.name}}</h1>
       </div>
     </div>
   </div>

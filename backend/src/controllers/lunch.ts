@@ -184,7 +184,6 @@ lunchController.get(
           const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
 
           const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
-          console.log(optimal_restaurant);
 
           lunchRepository
             .save({ ...lunch, restaurantId: optimal_restaurant })
