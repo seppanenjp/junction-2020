@@ -7,12 +7,12 @@ Luncher requires [Node.js](https://nodejs.org/) v10+ to run.
 Set up Environment variables
 
 ```sh
-Rename example.env to .env and add missing variables
+Rename example.env to .env and set correct variables
 ```
 
 ##### Frontend
 
-Install the dependencies and devDependencies and start the live server.
+Install npm packages and start the live server.
 
 ```sh
 $ cd frontend
@@ -24,7 +24,7 @@ Open browser url: http://localhost:4200
 
 ##### Backend
 
-Install the dependencies and devDependencies and start the live server.
+Install npm packages and start the live server.
 
 ```sh
 $ cd backend
@@ -32,7 +32,7 @@ $ npm install
 $ npm run dev:watch
 ```
 
-API can be found from http://localhost:8080
+API is located here: http://localhost:8080
 
 ##### Database
 
