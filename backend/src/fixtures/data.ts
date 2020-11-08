@@ -8,38 +8,38 @@ export const createPostgresData = async () => {
     RestaurantRepository
   );
   await restaurantRepository.save([
-    generateRestaurant('Barbarossa', 1, 60.168265, 24.930987, 'Pizzaa'),
+    generateRestaurant('Barbarossa', [1], 60.168265, 24.930987, 'Pizzaa'),
     generateRestaurant(
       'Singapore Hot Wok',
-      [1, 2],
+      [2],
       60.169161,
       24.933669,
       'Numero 1, Numero 2, Numero 3'
     ),
     generateRestaurant(
       'McDonalds',
-      [1],
+      [3],
       60.169005,
       24.929982,
       'Big Mac & Cheesburger'
     ),
     generateRestaurant(
       'Noodle Master',
-      [2],
+      [4],
       60.171396,
       24.926701,
       'Dan Dan noodles'
     ),
     generateRestaurant(
       'Classic Pizza Stockmann',
-      [2, 3],
+      [5],
       60.168415,
       24.942684,
       'Best Pizza in town'
     ),
     generateRestaurant(
       'Ravintola Paulette',
-      [2, 4],
+      [6],
       60.158708,
       24.945918,
       'French cuisine'

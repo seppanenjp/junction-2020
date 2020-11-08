@@ -193,7 +193,6 @@ lunchController.get(
         });
       })
       .catch((e) => {
-        console.log(e);
         response.status(500).send({ message: 'Unable to fetch participants' });
       });
   }
