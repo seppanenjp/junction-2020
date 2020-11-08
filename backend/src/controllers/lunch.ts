@@ -180,7 +180,7 @@ lunchController.get(
             const restaurant_rankings = calculateUtilities(
               utility_value_matrix
             );
-            const restaurantIdx = customArgMax(restaurant_rankings); // This is index of luchPossible restaurants array
+            const restaurantIdx = customArgMax(restaurant_rankings); // This is index of lunchPossible restaurants array
 
             const optimal_restaurant = lunch.possibleRestaurants[restaurantIdx]; // <--- This is the restaurant to be saved
 

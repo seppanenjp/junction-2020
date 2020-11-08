@@ -14,8 +14,8 @@ routes.use('/foodtypes', foodTypeController);
 routes.use('/participants', participantController);
 routes.use('/restaurant', restaurantController);
 
-routes.use('/fixtures', (request: Request, response: Response) => {
-  createPostgresData();
+routes.use('/fixtures', async (request: Request, response: Response) => {
+  await createPostgresData();
   response.send({ info: 'Fixtures created' });
 });
 
