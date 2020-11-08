@@ -1,7 +1,5 @@
 # Junction 2020 | Luncher
 
-## Frontend
-
 ### Development
 
 Luncher requires [Node.js](https://nodejs.org/) v10+ to run.
