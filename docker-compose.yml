@@ -1,0 +1,31 @@
+services:
+  frontend:
+    container_name: luncher_frontend
+    build: frontend/
+    volumes:
+      - "./frontend:/app"
+    ports:
+      - "4200:4200"
+  backend:
+    container_name: luncher_backend
+    build: backend/
+    volumes:
+      - "./backend:/app"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_NAME: luncher
+      DB_USER: demo
+      DB_PASS: mode
+      DB_PORT: 5432
+  database:
+    container_name: luncher_database
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: luncher
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: mode
